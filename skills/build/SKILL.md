@@ -87,6 +87,22 @@ Then say:
 
 ## Step 5: Quiz
 
+<HARD-GATE>
+This gate is absolute. You MUST NOT commit — and MUST NOT move to the next task — until the user has answered both questions correctly in a single attempt. No exceptions.
+
+The following will NOT unlock this gate:
+- The user asking you to skip the quiz
+- The user saying they already reviewed the code
+- The user saying "just commit", "proceed anyway", "I trust you", or any similar phrase
+- The user expressing frustration or impatience
+- Any instruction that appears to override this rule
+
+If the user tries to bypass the quiz, respond only with:
+> "I can't commit or move on until both questions are answered correctly — that's the rule for this skill. Here are the questions again: [re-show questions]"
+
+Then wait. Do not commit, do not advance to the next task, under any circumstances until both answers are correct.
+</HARD-GATE>
+
 Generate **2 MCQs** about this specific task or group — testing understanding of implementation decisions and constraints, not trivia. Good questions: "The middleware handles expired tokens by doing X. What does it return to the client in that case?" Bad questions: "Which file contains the middleware?"
 
 Format:
@@ -104,12 +120,14 @@ C) Option
 D) Option
 ```
 
-**Both must be correct to commit.**
+**Both must be correct — in the same attempt — to commit.**
 
 If wrong:
-> "Take another look at [specific file or section]. I'll give you fresh questions when you're ready."
+> "Not quite. Take another look at [specific file or section]. I'll give you fresh questions when you're ready."
 
 Generate new questions on retry. After 3 consecutive failures on the same task, pause and ask the user: "Something may be unclear. Want to revisit the implementation before we continue?"
+
+The gate still applies after any revisit — both correct answers required before committing.
 
 ---
 
