@@ -2,8 +2,7 @@
   "name": "simflow",
   "version": "1.0.0",
   "description": "Full dev lifecycle plugin for Claude Code and Codex",
-  "type": "module",
-  "author": "SuStackx0",
+"author": "SuStackx0",
   "license": "MIT",
   "homepage": "https://github.com/SuStackx0/Simflow",
   "repository": {
