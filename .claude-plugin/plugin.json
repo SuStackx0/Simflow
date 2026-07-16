@@ -1,0 +1,22 @@
+{
+  "name": "simflow",
+  "description": "Full dev lifecycle plugin for Claude Code: understand, build, test, review, and debug with a lightweight skill-based workflow",
+  "version": "1.0.0",
+  "author": {
+    "name": "SuStackx0",
+    "email": "gs703880@gmail.com"
+  },
+  "homepage": "https://github.com/SuStackx0/Simflow",
+  "repository": "https://github.com/SuStackx0/Simflow",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "workflow",
+    "brainstorming",
+    "debugging",
+    "build",
+    "review",
+    "testing",
+    "agents"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "simflow",
+  "description": "Full dev lifecycle plugin for Claude Code",
+  "owner": {
+    "name": "SuStackx0",
+    "email": "gs703880@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "simflow",
+      "description": "Full dev lifecycle plugin: understand, build, test, review, and debug with a lightweight skill-based workflow",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "SuStackx0",
+        "email": "gs703880@gmail.com"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "simflow",
+  "version": "1.0.0",
+  "description": "Full dev lifecycle plugin: understand, build, test, review, and debug with a lightweight skill-based workflow",
+  "author": {
+    "name": "SuStackx0",
+    "email": "gs703880@gmail.com",
+    "url": "https://github.com/SuStackx0"
+  },
+  "homepage": "https://github.com/SuStackx0/Simflow",
+  "repository": "https://github.com/SuStackx0/Simflow",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "workflow",
+    "brainstorming",
+    "debugging",
+    "build",
+    "review",
+    "testing"
+  ],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "hooks": "./hooks/hooks-codex.json"
+}
