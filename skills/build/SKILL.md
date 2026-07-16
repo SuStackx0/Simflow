@@ -1,95 +1,141 @@
 ---
 name: build
-description: Use when the user wants to implement something. Reads the spec (or accepts an inline description), dispatches agents to build task by task, and quizzes the user after each task before committing.
+description: Use when the user wants to implement something. Reads the spec (or accepts an inline description), dispatches agents to plan and build, and quizzes the user after each task or parallel group before committing. All commits in the user's name only.
 ---
 
 # Build
 
-Reads a spec (or an inline description of what to build), breaks the work into tasks using the planner agent, then implements each task — pausing after each one for the user to review and pass a 2-question quiz before committing.
+Reads a spec (or an inline description), dispatches `simflow-planner` to break it into tasks, then implements each task or group — pausing after each for the user to review and pass a 2-question quiz before committing.
 
 ## Flow
 
 ```
-Read spec or accept inline description
-    ↓
-simflow-planner: break into tasks (parallel vs sequential)
-    ↓
-For each task:
-    simflow-implementer: build the task
+Locate spec OR accept inline description
         ↓
-    Present code/design to user for review
+simflow-planner → task list with dependency map
         ↓
-    2 MCQs about this task
-        ↓ (wrong)
-    Ask user to re-read → new MCQs → repeat
-        ↓ (both correct)
-    Commit in user's name only
+For each sequential task OR parallel group:
+    Dispatch simflow-implementer(s)
+        ↓
+    If implementer fails → report to user → get feedback → retry
+        ↓
+    Present work clearly to user
+        ↓
+    User reviews → may reject → give feedback → re-implement
+        ↓
+    2 MCQs
+        ↓ wrong
+    "Re-read [specific area]. Fresh questions when ready."
+        ↓ both correct
+    git status → stage only task files → commit in user's name
         ↓
 All tasks done → suggest simflow:test
 ```
 
-## Input Detection
+---
 
-Check for an existing spec file first:
-- Look for `docs/simflow/specs/*.md` — use the most recent one
-- If multiple exist, ask the user which one to use
-- If none exists, ask the user to describe what to build inline
+## Step 1: Locate Input
 
-## Task Planning
+Check for an existing spec in this order:
+1. Look in `docs/simflow/specs/` for files matching `*.md`
+2. Use the most recent file by the **YYYY-MM-DD date prefix** in the filename. If two share the same date, use the one with the latest git commit timestamp.
+3. If multiple specs exist with different dates and it's unclear which to use: ask the user which one.
+4. If no spec file exists: ask the user to describe what to build. Take that description as the working brief.
 
-Dispatch the `simflow-planner` agent with the spec or inline description. The planner returns:
-- A list of tasks with clear scope
-- Which tasks are independent (can run in parallel)
-- Which tasks have dependencies (must run sequentially)
-- Which agent is best suited for each task
+---
 
-Use `simflow:dispatch` to run independent tasks in parallel.
+## Step 2: Plan
 
-## Per-Task Flow
+Dispatch `simflow-planner` with the full spec content or the user's inline description. The planner returns:
+- A task list with descriptions and agent assignments
+- Which tasks are independent (parallel group) and which depend on prior tasks (sequential)
 
-For each task (after implementation):
+If the planner returns ambiguities: surface them to the user and get answers before proceeding.
 
-1. **Present the work** — show the user what was built: key files changed, key decisions made, anything non-obvious.
+---
 
-2. **Ask for review** — say:
-   > "Take a look at the code above. Let me know when you're ready for the quiz."
+## Step 3: Implement (Per Task or Per Parallel Group)
 
-   Wait for confirmation.
+### Sequential tasks
+Run one at a time. After each: review → quiz → commit.
 
-3. **Quiz** — generate **2 MCQs** about this specific task. Test understanding of key implementation decisions or constraints — not trivia.
+### Parallel groups (independent tasks)
+Use the Agent tool with multiple concurrent invocations — one `simflow-implementer` per task. All agents run simultaneously.
 
-   Format:
-   ```
-   Q1. [Question about a key decision in this task]
-   A) ...
-   B) ...
-   C) ...
-   D) ...
+After all agents in the group complete:
+- If **any agent failed**: report all failures to the user before presenting any work. Get direction (retry? skip? change approach?) before continuing.
+- Present the group's combined work as a unit for review.
+- Run **2 MCQs covering the group as a whole** (not per-task MCQs).
+- On both correct: commit all group changes in a single commit.
 
-   Q2. [Question about how this task integrates or a constraint it must meet]
-   A) ...
-   B) ...
-   C) ...
-   D) ...
-   ```
+---
 
-   **Both must be correct to commit.**
+## Step 4: Present Work
 
-   If wrong:
-   > "Take another look at [specific area]. Come back when you're ready and I'll give you fresh questions."
+After each task or group, show the user:
+- Which files were created or modified
+- What each change does at a high level
+- Any non-obvious decisions made during implementation
+- Any assumptions that need validation
 
-   Generate new questions and repeat until both correct.
+Then say:
+> "Take a look at the above. Let me know when you're ready for the quiz — or if anything looks wrong."
 
-4. **Commit** — commit only this task's changes:
-   ```bash
-   git add <changed files>
-   git commit -m "<short description of what this task built>"
-   ```
-   **Critical:** Use only the user's configured git name and email. No Co-Authored-By. No additional authors.
+**If the user rejects the work:** take their feedback, return it to `simflow-implementer` as a correction, and re-implement from Step 3. Do not quiz on rejected work.
 
-5. Move to the next task.
+---
+
+## Step 5: Quiz
+
+Generate **2 MCQs** about this specific task or group — testing understanding of implementation decisions and constraints, not trivia. Good questions: "The middleware handles expired tokens by doing X. What does it return to the client in that case?" Bad questions: "Which file contains the middleware?"
+
+Format:
+```
+Q1. [Question about a key decision in this task/group]
+A) Option
+B) Option
+C) Option
+D) Option
+
+Q2. [Question about integration, a constraint, or an edge case]
+A) Option
+B) Option
+C) Option
+D) Option
+```
+
+**Both must be correct to commit.**
+
+If wrong:
+> "Take another look at [specific file or section]. I'll give you fresh questions when you're ready."
+
+Generate new questions on retry. After 3 consecutive failures on the same task, pause and ask the user: "Something may be unclear. Want to revisit the implementation before we continue?"
+
+---
+
+## Step 6: Commit
+
+```bash
+git status          # review all modified files
+git add <only the files changed by this task or group>
+```
+
+Do not stage files from prior tasks, unrelated changes, or pre-existing dirty state.
+
+```bash
+git commit -m "feat: <imperative-mood description of what was built, ≤72 chars>"
+```
+
+Examples of good commit messages:
+- `feat: add JWT authentication middleware`
+- `feat: implement user profile endpoint`
+- `feat: wire database connection pool`
+
+**No Co-Authored-By. No additional authors. Only the user's configured git name and email.**
+
+---
 
 ## Completion
 
-When all tasks are done:
+When all tasks are committed:
 > "All tasks complete. Want me to run `simflow:test` to verify everything works?"
