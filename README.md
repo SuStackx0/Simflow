@@ -29,25 +29,15 @@ SimFlow provides 6 skills and 5 agents that work together across the full dev li
 
 ### Claude Code
 
-1. Add SimFlow as a plugin in your `~/.claude/settings.json`:
+Run these three commands inside Claude Code:
 
-```json
-{
-  "enabledPlugins": {
-    "simflow@simflow-marketplace": true
-  },
-  "extraKnownMarketplaces": {
-    "simflow-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "SuStackx0/Simflow"
-      }
-    }
-  }
-}
+```
+/plugin marketplace add SuStackx0/Simflow
+/plugin install simflow@simflow
+/reload-plugins
 ```
 
-2. Restart Claude Code. SimFlow loads automatically at every session start.
+That's it. SimFlow loads automatically at every session start.
 
 ### Codex
 
