@@ -14,10 +14,12 @@ SimFlow provides 6 skills and 5 agents that work together across the full dev li
 |---|---|
 | `simflow:understand` | Brainstorm + grill an idea → write spec → quiz you on it → commit |
 | `simflow:build` | Read spec → plan tasks → implement → review each task → commit |
+| `simflow:iterate` | Change or extend existing code → light grill → targeted plan → quiz → commit |
 | `simflow:dispatch` | Fan out independent tasks to agents in parallel |
 | `simflow:test` | Run tests, find gaps, write new tests, commit them |
 | `simflow:review` | Check implementation against spec → fix gaps → loop until clean |
 | `simflow:debug` | Systematic root cause analysis → fix → verify → commit |
+| `simflow:status` | Snapshot of project state — spec, progress, tests, next step |
 
 **You can start anywhere.** No forced order — start with `debug` when something's broken, `build` when you already know what to make, `test` whenever you're ready. Skills auto-detect prior outputs like spec files.
 
@@ -155,7 +157,7 @@ Use when something is broken.
 
 ## Agents
 
-SimFlow includes 5 bundled agents. They are dispatched automatically by skills — you don't need to invoke them directly.
+SimFlow includes 5 bundled agents. They are dispatched automatically by skills — you don't need to invoke them directly. All agents have persistent project memory, so they accumulate knowledge about your codebase across sessions.
 
 | Agent | Model | Role |
 |---|---|---|

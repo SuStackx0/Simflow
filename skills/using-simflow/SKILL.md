@@ -15,10 +15,12 @@ Use the `Skill` tool to invoke any of these. The skill loads its full instructio
 |---|---|
 | `simflow:understand` | Brainstorm + grill an idea → write spec → quiz user → commit |
 | `simflow:build` | Read spec or description → plan → implement task by task → quiz → commit |
+| `simflow:iterate` | Change or extend existing code → light grill → targeted plan → quiz → commit |
 | `simflow:dispatch` | Fan out independent tasks to agents in parallel |
 | `simflow:test` | Run tests, identify gaps, write new tests, commit them |
 | `simflow:review` | Check implementation against spec → fix gaps → loop until clean |
 | `simflow:debug` | Systematic root cause analysis → confirm with user → fix → commit |
+| `simflow:status` | Snapshot of project state — spec, progress, tests, next step |
 
 ## Triggering Rules
 
@@ -28,10 +30,12 @@ Use the `Skill` tool to invoke any of these. The skill loads its full instructio
 |---|---|
 | "I have an idea for...", "I want to build...", "Let's plan..." | `simflow:understand` |
 | "Implement this", "Build it", "Add this feature", "Write the code" | `simflow:build` |
+| "Change how X works", "Refactor this", "Update this", "Add X to existing Y" | `simflow:iterate` |
 | "Run these in parallel", "Fan out", "Do these simultaneously" | `simflow:dispatch` |
 | "Test this", "Run tests", "Check if it works" | `simflow:test` |
 | "Does this match the spec?", "Check requirements", "Is everything implemented?" | `simflow:review` |
 | "It's broken", "This isn't working", "I'm getting an error", "There's a bug" | `simflow:debug` |
+| "Where are we?", "What's done?", "Catch me up", "What's left?" | `simflow:status` |
 
 **Manual trigger**: the user can always invoke a skill directly by naming it or typing `/simflow:skill-name`.
 

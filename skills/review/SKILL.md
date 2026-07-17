@@ -70,6 +70,17 @@ All commits during this phase: **user's git name and email only. No Co-Authored-
 
 After the gap build completes, automatically re-run the reviewer (return to Step 2). Do not wait for the user to invoke `simflow:review` again.
 
+**At the start of every review cycle, print the cycle header:**
+```
+── Review cycle N of 3 ─────────────────────────
+```
+Replace N with the current cycle number (1, 2, 3). After the reviewer runs, also print:
+```
+Result: [PASS / PASS-WITH-NOTES / FAIL — X gap(s) remaining]
+```
+
+This keeps the user informed of progress without requiring them to ask.
+
 **Loop limit:** if the same gap appears in the reviewer output for **3 consecutive cycles** without being resolved, stop the loop and escalate:
 > "After 3 build attempts, `[gap description]` is still not resolved. This may indicate a conflict between the spec and the implementation approach, or the spec requirement may be unclear. Here's what was attempted: [summary]. How would you like to proceed?"
 

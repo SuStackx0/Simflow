@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0] — 2026-07-17
+
+### Added
+- `simflow:status` — project state snapshot (spec, progress, tests, next step)
+- `simflow:iterate` — change/extend existing code with light grill, targeted plan, quiz, and commit
+- `memory: project` on all 5 agents — codebase knowledge persists across sessions
+
+### Improved
+- `simflow:review` — shows cycle counter (`── Review cycle N of 3 ──`) and gap count at each loop iteration
+- `simflow:understand` and `simflow:build` — quiz gate is now fully unbypassable with explicit `<HARD-GATE>` block listing every bypass attempt
+
+---
+
 ## [1.0.0] — 2026-07-16
 
 ### Added
